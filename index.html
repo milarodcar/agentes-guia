@@ -267,11 +267,19 @@ q { quotes: "«" "»"; }
   .flow .arrow { flex-basis: 32px; transform: rotate(90deg); }
   .issue dl { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------- Selector de guías ---------- */
+.guides { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: .88rem; }
+.guides-label { font-family: var(--font-display); font-weight: 600; font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.guides a { padding: 4px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--fg); text-decoration: none; background: var(--surface); }
+.guides a:hover { border-color: var(--accent); color: var(--accent); }
+.guides a[aria-current="page"] { background: var(--accent-soft); border-color: transparent; color: var(--accent); font-weight: 600; }
 </style>
 </head>
 <body>
 <div class="page">
   <header class="hero">
+    <nav class="guides" aria-label="Guías disponibles"><span class="guides-label">Guías</span><a href="./" aria-current="page">DraxBot</a><a href="proyeccion-comercial/">Proyección Comercial con Claude</a></nav>
     <p class="eyebrow">Guía de uso · Preparada para Draxton</p>
     <h1>Cómo usar DraxBot, el agente de documentación de Draxton</h1>
     <p class="lede">Pregunte a DraxBot por previsiones, noticias y cifras del mercado de automoción europeo y reciba la respuesta con sus fuentes. Consulte también los informes de inteligencia semanales y mensuales.</p>

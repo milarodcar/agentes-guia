@@ -1,21 +1,27 @@
-# Guía de uso de DraxBot
+# Guías de uso para Draxton
 
-Manual web, en español, para los usuarios de **DraxBot**, el agente de documentación de Draxton. Explica cómo acceder, hacer preguntas, leer las respuestas y consultar los informes de inteligencia semanales y mensuales.
+Manuales web, en español, para los usuarios de Draxton. Son páginas estáticas: no necesitan servidor ni instalación.
 
-La guía es una página estática: no necesita servidor ni instalación.
+| Guía | Contenido | Dirección |
+| --- | --- | --- |
+| DraxBot | Cómo usar DraxBot, el agente de documentación: acceso, preguntas, respuestas e informes de inteligencia | https://milarodcar.github.io/draxbot-guia-web/ |
+| Proyección Comercial con Claude | Cómo configurar Claude Desktop para consultar el informe de Power BI «Proyección Comercial» | https://milarodcar.github.io/draxbot-guia-web/proyeccion-comercial/ |
+
+Las dos páginas tienen arriba un selector **Guías** para pasar de una a otra.
 
 ## Contenido del proyecto
 
 | Archivo | Para qué sirve |
 | --- | --- |
-| `index.html` | La guía completa (HTML, CSS y JavaScript en un solo archivo) |
-| `img/` | Capturas de pantalla que aparecen en la guía |
+| `index.html` | Guía de DraxBot (HTML, CSS y JavaScript en un solo archivo) |
+| `img/` | Capturas de pantalla de la guía de DraxBot |
+| `proyeccion-comercial/index.html` | Guía de Proyección Comercial con Claude (copia de la guía de Inkoova, con las imágenes incluidas en el archivo) |
 | `.nojekyll` | Indica a GitHub Pages que publique los archivos tal cual |
 | `README.md` | Este archivo |
 
-## Ver la guía en local
+## Ver las guías en local
 
-Abre `index.html` con doble clic. Se abre en el navegador.
+Abre `index.html` (o `proyeccion-comercial/index.html`) con doble clic. Se abre en el navegador.
 
 ## Publicar en GitHub Pages
 
