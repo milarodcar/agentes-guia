@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Guía paso a paso para usar DraxBot, el agente de documentación de Draxton, y consultar los informes de inteligencia de automoción.">
+<title>Guía de uso de DraxBot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: guía de uso a dos columnas — índice y progreso fijos a la izquierda, lectura de ~68ch a la derecha; una sola columna en móvil */
+:root {
+  --bg: #F5F7FA;
+  --surface: #FFFFFF;
+  --fg: #16212C;
+  --muted: #586878;
+  --line: #DAE1E8;
+  --accent: #1F5FA3;
+  --accent-soft: #E5EDF7;
+  --on-accent: #FFFFFF;
+  --code: #EDF1F5;
+  --warn: #8F5200;
+  --warn-soft: #FCF1E1;
+  --ok: #146C45;
+  --ok-soft: #E4F3EA;
+  --callout: #E8590C;
+  --on-callout: #FFFFFF;
+  --shadow: 0 1px 2px rgba(22, 33, 44, .06), 0 8px 24px rgba(22, 33, 44, .06);
+  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D131A; --surface: #141D27; --fg: #E2E8EE; --muted: #93A2B2; --line: #253241;
+    --accent: #78B1EC; --accent-soft: #172738; --on-accent: #0D131A; --code: #19232F;
+    --warn: #F0B65E; --warn-soft: #29200F; --ok: #62D29C; --ok-soft: #11261C;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D131A; --surface: #141D27; --fg: #E2E8EE; --muted: #93A2B2; --line: #253241;
+  --accent: #78B1EC; --accent-soft: #172738; --on-accent: #0D131A; --code: #19232F;
+  --warn: #F0B65E; --warn-soft: #29200F; --ok: #62D29C; --ok-soft: #11261C;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 24px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: .86em; }
+p code, li code, dd code, td code {
+  background: var(--code); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere;
+}
+kbd {
+  border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px;
+  padding: 0 .35em; background: var(--surface); white-space: nowrap;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.2; margin: 0; }
+h2 { font-size: 1.65rem; font-weight: 700; letter-spacing: -.01em; }
+h3 { font-size: 1.22rem; font-weight: 600; }
+p { margin: 0; }
+.eyebrow {
+  font-family: var(--font-display); font-size: .78rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+}
+
+/* ---------- Estructura ---------- */
+.page { max-width: 1180px; margin: 0 auto; padding-inline: 24px; padding-block: 0 64px; }
+.hero {
+  padding-block: 56px 40px;
+  display: grid; gap: 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.hero h1 { font-size: clamp(2rem, 4.6vw, 3.1rem); font-weight: 800; letter-spacing: -.02em; max-width: 22ch; }
+.hero .lede { font-size: 1.15rem; color: var(--muted); max-width: 62ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 8px 0 0; padding: 0; }
+.meta div { display: grid; gap: 0; }
+.meta dt { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.meta dd { margin: 0; font-weight: 600; }
+
+.layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 56px; align-items: start; }
+.toc {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px);
+  display: grid; gap: 20px; font-size: .92rem;
+}
+.toc-label { font-family: var(--font-display); font-weight: 600; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.toc ol ol { padding-left: 14px; border-left: 1px solid var(--line); margin: 2px 0 4px 6px; }
+.toc a { display: flex; gap: 8px; align-items: baseline; padding: 3px 8px; border-radius: 6px; color: var(--fg); text-decoration: none; }
+.toc a:hover { background: var(--accent-soft); color: var(--accent); }
+.toc .n { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); min-width: 1.2em; }
+.toc a.is-done .n { color: var(--ok); }
+.progress { display: grid; gap: 8px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.progress .bar { height: 6px; border-radius: 99px; background: var(--code); overflow: hidden; }
+.progress .bar span { display: block; height: 100%; width: 0; background: var(--ok); border-radius: 99px; transition: width .25s ease; }
+.progress p { font-size: .85rem; color: var(--muted); }
+.progress strong { color: var(--fg); font-variant-numeric: tabular-nums; }
+.progress button { justify-self: start; font: inherit; font-size: .8rem; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+main { min-width: 0; display: grid; gap: 56px; }
+main > section { display: grid; gap: 18px; min-width: 0; }
+.prose { max-width: 68ch; display: grid; gap: 14px; }
+
+/* ---------- Cómo funciona ---------- */
+.flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
+.flow .node {
+  flex: 1 1 180px; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); display: grid; gap: 4px; align-content: start;
+}
+.flow .node b { font-family: var(--font-display); font-weight: 600; }
+.flow .node span { font-size: .9rem; color: var(--muted); }
+.flow .arrow { flex: 0 0 40px; display: grid; place-items: center; color: var(--accent); }
+.flow .arrow svg { width: 22px; height: 22px; }
+
+/* ---------- Listas ---------- */
+.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; }
+.checks svg { width: 20px; height: 20px; color: var(--ok); margin-top: 3px; }
+ol.sub { margin: 0; padding: 0; list-style: none; counter-reset: sub; display: grid; gap: 10px; }
+ol.sub > li { counter-increment: sub; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 8px; }
+ol.sub > li::before {
+  content: counter(sub); font-family: var(--font-mono); font-size: .8rem; font-weight: 500;
+  width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent); margin-top: 2px;
+}
+ol.sub > li > div { display: grid; gap: 10px; min-width: 0; }
+ul.dots { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+ul.dots li::marker { color: var(--accent); }
+
+/* ---------- Resumen del proceso ---------- */
+.overview { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
+.overview li + li { border-top: 1px solid var(--line); }
+.overview a { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; color: var(--fg); text-decoration: none; }
+.overview a:hover { background: var(--accent-soft); }
+.overview .num { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.pill { font-size: .78rem; font-weight: 600; padding: 2px 10px; border-radius: 99px; white-space: nowrap; }
+.pill.once { background: var(--code); color: var(--muted); }
+.pill.again { background: var(--warn-soft); color: var(--warn); }
+.pill.each { background: var(--accent-soft); color: var(--accent); }
+
+/* ---------- Pasos ---------- */
+.steps { display: grid; gap: 20px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px 28px 28px; display: grid; gap: 18px; min-width: 0; scroll-margin-top: 24px; }
+.step.done { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); }
+.step-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; }
+.step-num {
+  font-family: var(--font-display); font-weight: 800; font-size: 2.6rem; line-height: 1; color: var(--accent);
+  font-variant-numeric: tabular-nums; min-width: 1.1ch;
+}
+.step.done .step-num { color: var(--ok); }
+.step-head .k { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-family: var(--font-display); font-weight: 600; }
+.done-toggle { display: inline-flex; gap: 8px; align-items: center; font-size: .88rem; color: var(--muted); cursor: pointer; padding: 6px 12px; border: 1px solid var(--line); border-radius: 99px; user-select: none; }
+.done-toggle input { accent-color: var(--ok); width: 16px; height: 16px; margin: 0; }
+.step.done .done-toggle { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); background: var(--ok-soft); }
+.step-body { display: grid; gap: 16px; min-width: 0; max-width: 72ch; }
+
+/* ---------- Código ---------- */
+.code { border: 1px solid var(--line); border-radius: 10px; background: var(--code); min-width: 0; overflow: hidden; }
+.code-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 8px 6px 14px; border-bottom: 1px solid var(--line); font-size: .8rem; color: var(--muted); }
+.code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: .84rem; line-height: 1.6; color: var(--fg); }
+.code pre code { font-size: inherit; background: none; padding: 0; }
+.code pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.copy {
+  font: 600 .78rem var(--font-body); color: var(--accent); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; white-space: nowrap;
+}
+.copy:hover { border-color: var(--accent); }
+.copy.ok { color: var(--ok); border-color: var(--ok); }
+.dl-link { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; justify-self: start; }
+.dl-link svg { width: 16px; height: 16px; }
+
+/* ---------- Tablas ---------- */
+.paths { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.paths-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.paths th, .paths td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.paths tr:last-child td { border-bottom: 0; }
+.paths th { font-family: var(--font-display); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--code); }
+.paths td:first-child { font-weight: 600; }
+.paths.legend td:first-child { width: 44px; }
+.paths .sections { margin: 0; padding-left: 1.1em; display: grid; gap: 2px; }
+.paths .sections li::marker { color: var(--muted); }
+.callout {
+  width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center;
+  background: var(--callout); color: var(--on-callout); font: 700 .8rem var(--font-body);
+}
+
+/* ---------- Avisos ---------- */
+.note { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 14px 16px; border-radius: 10px; }
+.note svg { width: 20px; height: 20px; margin-top: 2px; }
+.note > div { display: grid; gap: 4px; min-width: 0; }
+.note .t { font-weight: 700; }
+.note.info { background: var(--accent-soft); } .note.info svg, .note.info .t { color: var(--accent); }
+.note.warn { background: var(--warn-soft); } .note.warn svg, .note.warn .t { color: var(--warn); }
+.note.ok { background: var(--ok-soft); } .note.ok svg, .note.ok .t { color: var(--ok); }
+
+/* ---------- Capturas ---------- */
+figure { margin: 0; display: grid; gap: 8px; }
+.shot { padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--code); cursor: zoom-in; display: block; width: 100%; }
+.shot img { width: 100%; }
+figcaption { font-size: .85rem; color: var(--muted); }
+figcaption b { color: var(--fg); font-weight: 600; }
+dialog.zoom { padding: 0; border: 0; background: transparent; max-width: min(96vw, 1600px); max-height: 92vh; }
+dialog.zoom::backdrop { background: rgba(5, 10, 15, .8); }
+dialog.zoom img { max-height: 86vh; width: auto; margin: 0 auto; border-radius: 8px; }
+dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem var(--font-body); background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+
+/* ---------- Ejemplos ---------- */
+.questions { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.questions li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 10px 10px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+q { quotes: "«" "»"; }
+
+/* ---------- Problemas ---------- */
+.issues { display: grid; gap: 12px; }
+.issue { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; display: grid; gap: 12px; }
+.issue h3 { font-size: 1.05rem; }
+.issue dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.issue dl > div { display: grid; gap: 2px; align-content: start; }
+.issue dt { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.issue dd { margin: 0; font-size: .95rem; }
+.faq { margin: 0; display: grid; gap: 14px; max-width: 68ch; }
+.faq dt { font-weight: 700; }
+.faq dd { margin: 2px 0 0; color: var(--fg); }
+
+/* ---------- Soporte y pie ---------- */
+.contact { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.contact .who { display: grid; }
+.contact .who span { color: var(--muted); font-size: .9rem; }
+.contact .mail { display: flex; gap: 10px; align-items: center; min-width: 0; }
+.contact .mail span { font-family: var(--font-mono); font-size: .9rem; user-select: all; overflow-wrap: anywhere; }
+.foot { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+@media (max-width: 920px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .toc { display: none; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .page { padding-inline: 16px; }
+  .hero { padding-block: 36px 28px; margin-bottom: 28px; }
+  main { gap: 44px; }
+  .step { padding: 18px 16px 20px; }
+  .step-head { grid-template-columns: auto minmax(0, 1fr); }
+  .step-head .done-toggle { grid-column: 1 / -1; justify-self: start; }
+  .step-num { font-size: 2.1rem; }
+  .overview a { grid-template-columns: 34px minmax(0, 1fr); }
+  .overview .pill { grid-column: 2; justify-self: start; }
+  .flow { flex-direction: column; }
+  .flow .node { flex-basis: auto; }
+  .flow .arrow { flex-basis: 32px; transform: rotate(90deg); }
+  .issue dl { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- Selector de guías ---------- */
+.guides { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: .88rem; }
+.guides-label { font-family: var(--font-display); font-weight: 600; font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.guides a { padding: 4px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--fg); text-decoration: none; background: var(--surface); }
+.guides a:hover { border-color: var(--accent); color: var(--accent); }
+.guides a[aria-current="page"] { background: var(--accent-soft); border-color: transparent; color: var(--accent); font-weight: 600; }
+.guides a.guides-label { padding: 0; border: 0; background: none; color: var(--muted); }
+.guides a.guides-label:hover { color: var(--accent); text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="hero">
+    <nav class="guides" aria-label="Guías disponibles"><a class="guides-label" href="../" title="Todas las guías">Guías</a><a href="./" aria-current="page">DraxBot</a><a href="../proyeccion-comercial/">Proyección Comercial con Claude</a></nav>
+    <p class="eyebrow">Guía de uso · Preparada para Draxton</p>
+    <h1>Cómo usar DraxBot, el agente de documentación de Draxton</h1>
+    <p class="lede">Pregunte a DraxBot por previsiones, noticias y cifras del mercado de automoción europeo y reciba la respuesta con sus fuentes. Consulte también los informes de inteligencia semanales y mensuales.</p>
+    <dl class="meta">
+      <div><dt>Elaborado por</dt><dd>Inkoova</dd></div>
+      <div><dt>Versión</dt><dd>1.0</dd></div>
+      <div><dt>Fecha</dt><dd>6 de octubre de 2026</dd></div>
+      <div><dt>Tiempo de lectura</dt><dd>10 min</dd></div>
+    </dl>
+  </header>
+
+  <div class="layout">
+    <aside class="toc" aria-label="Índice">
+      <p class="toc-label">Contenido</p>
+      <nav>
+        <ol>
+          <li><a href="#introduccion"><span class="n">1</span>Introducción</a></li>
+          <li><a href="#requisitos"><span class="n">2</span>Requisitos previos</a></li>
+          <li><a href="#resumen"><span class="n">3</span>Resumen del proceso</a></li>
+          <li><a href="#uso"><span class="n">4</span>Uso paso a paso</a>
+            <ol>
+              <li><a href="#paso-1" data-step="1"><span class="n">1</span>Acceder</a></li>
+              <li><a href="#paso-2" data-step="2"><span class="n">2</span>La pantalla</a></li>
+              <li><a href="#paso-3" data-step="3"><span class="n">3</span>Hacer una pregunta</a></li>
+              <li><a href="#paso-4" data-step="4"><span class="n">4</span>Leer la respuesta</a></li>
+              <li><a href="#paso-5" data-step="5"><span class="n">5</span>Seguir la conversación</a></li>
+              <li><a href="#paso-6" data-step="6"><span class="n">6</span>Informes</a></li>
+              <li><a href="#paso-7" data-step="7"><span class="n">7</span>Guardar en PDF</a></li>
+            </ol>
+          </li>
+          <li><a href="#ejemplos"><span class="n">5</span>Ejemplos de preguntas</a></li>
+          <li><a href="#buenas-practicas"><span class="n">6</span>Buenas prácticas</a></li>
+          <li><a href="#problemas"><span class="n">7</span>Solución de problemas</a></li>
+          <li><a href="#soporte"><span class="n">8</span>Soporte</a></li>
+        </ol>
+      </nav>
+      <div class="progress" aria-live="polite">
+        <div class="bar"><span id="progress-bar"></span></div>
+        <p><strong id="progress-count">0 de 7</strong> pasos completados</p>
+        <button type="button" id="progress-reset">Reiniciar progreso</button>
+      </div>
+    </aside>
+
+    <main>
+      <!-- 1. Introducción -->
+      <section id="introduccion">
+        <h2>Introducción</h2>
+        <div class="prose">
+          <p>Esta guía explica cómo usar <strong>DraxBot</strong>, el agente de documentación de Draxton. DraxBot responde en lenguaje natural a preguntas sobre el mercado de automoción europeo a partir de una base de conocimiento interna, y en cada respuesta indica de qué documentos procede la información.</p>
+          <p><strong>¿Cómo funciona?</strong> Usted escribe la pregunta en la web de DraxBot. El agente la reformula para buscar mejor, localiza los fragmentos relevantes en la base de conocimiento y redacta la respuesta citando las fuentes. Si la base de conocimiento no cubre la pregunta, busca en fuentes públicas de confianza y lo indica en la respuesta.</p>
+        </div>
+        <div class="flow" role="img" aria-label="La web de DraxBot envía la pregunta al agente, que busca en la base de conocimiento y devuelve la respuesta con sus fuentes">
+          <div class="node"><b>Web de DraxBot</b><span>Usted escribe la pregunta y recibe la respuesta con sus fuentes.</span></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="node"><b>Agente DraxBot</b><span>Reformula la pregunta, busca en los documentos y redacta la respuesta.</span></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="node"><b>Base de conocimiento</b><span>Previsiones de S&amp;P Global y noticias del sector, actualizadas cada noche.</span></div>
+        </div>
+        <h3>Qué contiene la base de conocimiento</h3>
+        <div class="paths-wrap">
+          <table class="paths">
+            <thead><tr><th>Fuente</th><th>Contenido</th></tr></thead>
+            <tbody>
+              <tr><td>S&amp;P Global Connect</td><td>Previsiones de producción y ventas de vehículos ligeros</td></tr>
+              <tr><td>WardsAuto</td><td>Noticias del sector de automoción</td></tr>
+              <tr><td>Automotive News</td><td>Noticias del sector de automoción</td></tr>
+              <tr><td>Autovista</td><td>Noticias del sector de automoción</td></tr>
+              <tr><td>CBT News</td><td>Noticias del sector de automoción</td></tr>
+              <tr><td>Automotive World</td><td>Noticias del sector de automoción</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <div><p class="t">Documentos nuevos cada noche</p><p>Las fuentes se descargan automáticamente entre las 20:00 y las 02:00 (hora de Madrid). Lo que se publica hoy se puede consultar a partir de mañana.</p></div>
+        </div>
+      </section>
+
+      <!-- 2. Requisitos -->
+      <section id="requisitos">
+        <h2>Requisitos previos</h2>
+        <p class="prose">No hay que instalar nada. Solo necesita:</p>
+        <ul class="checks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Un <strong>navegador actualizado</strong>: Microsoft Edge, Google Chrome o Mozilla Firefox.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Acceso a la <strong>web de DraxBot</strong>: <a href="https://dsa.gis.com.mx/draxbot/ui/" target="_blank" rel="noopener">dsa.gis.com.mx/draxbot/ui</a>.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Una <strong>cuenta de trabajo de Microsoft de Draxton</strong>. Es obligatoria: DraxBot solo permite el acceso con una cuenta de Draxton.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Conexión a la <strong>red corporativa o a la VPN</strong>. Es obligatoria: fuera de ella, la web de DraxBot no se abre.</span></li>
+        </ul>
+      </section>
+
+      <!-- 3. Resumen -->
+      <section id="resumen">
+        <h2>Resumen del proceso</h2>
+        <ol class="overview">
+          <li><a href="#paso-1"><span class="num">1</span><span>Acceder a DraxBot e iniciar sesión</span><span class="pill each">Al empezar</span></a></li>
+          <li><a href="#paso-2"><span class="num">2</span><span>Conocer la pantalla de DraxBot</span><span class="pill once">Una vez</span></a></li>
+          <li><a href="#paso-3"><span class="num">3</span><span>Hacer una pregunta</span><span class="pill each">En cada consulta</span></a></li>
+          <li><a href="#paso-4"><span class="num">4</span><span>Leer la respuesta y sus fuentes</span><span class="pill each">En cada consulta</span></a></li>
+          <li><a href="#paso-5"><span class="num">5</span><span>Continuar la conversación o empezar otra</span><span class="pill again">Al cambiar de tema</span></a></li>
+          <li><a href="#paso-6"><span class="num">6</span><span>Consultar los informes de inteligencia</span><span class="pill again">Cada semana y cada mes</span></a></li>
+          <li><a href="#paso-7"><span class="num">7</span><span>Guardar un informe en PDF</span><span class="pill once">Cuando lo necesite</span></a></li>
+        </ol>
+      </section>
+
+      <!-- 4. Pasos -->
+      <section id="uso">
+        <h2>Uso paso a paso</h2>
+        <div class="steps">
+
+          <!-- Paso 1 -->
+          <article class="step" id="paso-1" data-step="1">
+            <div class="step-head">
+              <span class="step-num">1</span>
+              <div><p class="k">Paso 1</p><h3>Acceder a DraxBot e iniciar sesión</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-1"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <ol class="sub">
+                <li><div><p>Conectarse a la red corporativa o a la VPN. Sin esta conexión, DraxBot no está disponible.</p></div></li>
+                <li><div>
+                  <p>Abrir el navegador e ir a la dirección de DraxBot:</p>
+                  <div class="code"><div class="code-bar"><span>Dirección de DraxBot</span><button type="button" class="copy">Copiar</button></div><pre class="wrap"><code>https://dsa.gis.com.mx/draxbot/ui/</code></pre></div>
+                  <a class="dl-link" href="https://dsa.gis.com.mx/draxbot/ui/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Abrir DraxBot</a>
+                </div></li>
+                <li><div>
+                  <p>Se abre la página de inicio de sesión de Microsoft, con el logotipo de GIS. Escribir el correo de trabajo de Draxton en el campo <strong>Correo electrónico, teléfono o Skype</strong> y pulsar <strong>Siguiente</strong>.</p>
+                  <figure>
+                    <button type="button" class="shot" aria-label="Ampliar figura 1"><img src="../img/01-inicio-sesion.webp" width="2879" height="1685" alt="Página de inicio de sesión de Microsoft con el logotipo de GIS; el campo de correo electrónico y el botón Siguiente aparecen marcados"></button>
+                    <figcaption><b>Figura 1.</b> Página de inicio de sesión. Escriba su correo de Draxton en la zona marcada y pulse Siguiente.</figcaption>
+                  </figure>
+                </div></li>
+                <li><div><p>Introducir la contraseña y completar la verificación en dos pasos si se solicita.</p></div></li>
+                <li><div>
+                  <p>DraxBot se abre automáticamente. Comprobar la esquina inferior izquierda de la pantalla: un punto morado con el texto <strong>DraxBot agent connected</strong> indica que todo está listo.</p>
+                  <figure>
+                    <button type="button" class="shot" aria-label="Ampliar figura 2"><img src="../img/02-draxbot-conectado.webp" width="2876" height="1676" alt="Pantalla inicial de DraxBot en dsa.gis.com.mx, con el indicador DraxBot agent connected marcado en la esquina inferior izquierda"></button>
+                    <figcaption><b>Figura 2.</b> DraxBot listo para usar. El indicador marcado confirma la conexión.</figcaption>
+                  </figure>
+                </div></li>
+              </ol>
+              <div class="note info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>
+                <div><p class="t">Si la sesión caduca</p><p>DraxBot le lleva de nuevo a la página de inicio de sesión. Vuelva a entrar y repita la última pregunta. Guarde la dirección en Favoritos para acceder más rápido.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 2 -->
+          <article class="step" id="paso-2" data-step="2">
+            <div class="step-head">
+              <span class="step-num">2</span>
+              <div><p class="k">Paso 2</p><h3>Conocer la pantalla de DraxBot</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-2"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <p>Los textos de la aplicación están en inglés. La tabla explica cada zona; los números coinciden con los de la figura 3.</p>
+              <figure>
+                <button type="button" class="shot" aria-label="Ampliar figura 3"><img src="../img/03-pantalla-draxbot.webp" width="2720" height="1720" alt="Pantalla de DraxBot con una pregunta y su respuesta en español, y las zonas principales numeradas del 1 al 8"></button>
+                <figcaption><b>Figura 3.</b> Pantalla de DraxBot tras una primera pregunta. Pulse la imagen para ampliarla.</figcaption>
+              </figure>
+              <div class="paths-wrap">
+                <table class="paths legend">
+                  <thead><tr><th>N.º</th><th>Zona</th><th>Para qué sirve</th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="callout">1</span></td><td>Cuadro de pregunta (<em>Ask DraxBot about your documents…</em>)</td><td>Escribir la pregunta. <kbd>Intro</kbd> la envía; <kbd>Mayús</kbd> + <kbd>Intro</kbd> añade una línea nueva.</td></tr>
+                    <tr><td><span class="callout">2</span></td><td>Botón de enviar</td><td>Envía la pregunta, igual que <kbd>Intro</kbd>.</td></tr>
+                    <tr><td><span class="callout">3</span></td><td>Zona de conversación</td><td>Muestra sus preguntas y las respuestas, con la hora y el tiempo de respuesta.</td></tr>
+                    <tr><td><span class="callout">4</span></td><td><strong>History</strong></td><td>Lista las preguntas de la conversación actual. Pulse una para ir a su respuesta.</td></tr>
+                    <tr><td><span class="callout">5</span></td><td>Nueva conversación (icono de lápiz)</td><td>Vacía la pantalla y empieza una conversación nueva.</td></tr>
+                    <tr><td><span class="callout">6</span></td><td><strong>Current session</strong></td><td>Consultas realizadas (<em>Queries</em>), fuentes citadas (<em>Sources cited</em>) y tiempo medio de respuesta (<em>Avg. time</em>). Aparece tras la primera pregunta.</td></tr>
+                    <tr><td><span class="callout">7</span></td><td>Estado de la conexión</td><td>Punto morado: conectado. Punto rojo con <strong>Connection error</strong>: no hay conexión con el servicio.</td></tr>
+                    <tr><td><span class="callout">8</span></td><td><strong>Weekly Reports</strong></td><td>Abre la página de informes de inteligencia (<a href="#paso-6">paso 6</a>).</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 3 -->
+          <article class="step" id="paso-3" data-step="3">
+            <div class="step-head">
+              <span class="step-num">3</span>
+              <div><p class="k">Paso 3</p><h3>Hacer una pregunta</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-3"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <ol class="sub">
+                <li><div><p>Hacer clic en el cuadro de pregunta, en la parte inferior de la pantalla.</p></div></li>
+                <li><div>
+                  <p>Escribir la pregunta en lenguaje natural, por ejemplo:</p>
+                  <div class="code"><div class="code-bar"><span>Pregunta de ejemplo</span><button type="button" class="copy">Copiar</button></div><pre class="wrap"><code>¿Cuál es la previsión de producción de vehículos ligeros en España para 2026?</code></pre></div>
+                </div></li>
+                <li><div><p>Pulsar <kbd>Intro</kbd> o el botón de enviar.</p></div></li>
+                <li><div><p>Esperar la respuesta. Un contador muestra el tiempo transcurrido (<em>DraxBot is thinking… 24s</em>). Lo habitual es que la respuesta tarde entre 45 y 70 segundos.</p></div></li>
+              </ol>
+              <figure>
+                <button type="button" class="shot" aria-label="Ampliar figura 4"><img src="../img/04-esperando-respuesta.webp" width="2228" height="400" alt="Pregunta enviada y el indicador DraxBot is thinking con el contador de segundos"></button>
+                <figcaption><b>Figura 4.</b> Indicador de espera mientras DraxBot prepara la respuesta.</figcaption>
+              </figure>
+              <div class="note warn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.2v.01"/></svg>
+                <div><p class="t">No recargue la página mientras espera</p><p>Si recarga o cierra la pestaña, se pierden la pregunta y toda la conversación. El botón de enviar queda desactivado hasta que llega la respuesta.</p></div>
+              </div>
+              <div class="note info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+                <div><p class="t">Puede preguntar en español</p><p>DraxBot responde en el idioma de la pregunta. La mayoría de los documentos están en inglés: DraxBot traduce el contenido y mantiene los nombres de los documentos tal como aparecen.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 4 -->
+          <article class="step" id="paso-4" data-step="4">
+            <div class="step-head">
+              <span class="step-num">4</span>
+              <div><p class="k">Paso 4</p><h3>Leer la respuesta y sus fuentes</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-4"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <p>Cada respuesta empieza por la conclusión, sigue con el detalle e indica de dónde sale cada dato.</p>
+              <div class="paths-wrap">
+                <table class="paths">
+                  <thead><tr><th>Elemento</th><th>Qué le indica</th></tr></thead>
+                  <tbody>
+                    <tr><td>Frase inicial</td><td>La respuesta directa a su pregunta.</td></tr>
+                    <tr><td>Secciones, listas y tablas</td><td>Cifras, causas, tendencias e implicaciones para Draxton. Cuando compara varias cifras, las presenta en una tabla.</td></tr>
+                    <tr><td>Fechas</td><td>La fecha de cada dato clave. Los hechos antiguos se presentan como contexto, para no confundirlos con noticias actuales.</td></tr>
+                    <tr><td>Documentos citados en el texto</td><td>El documento interno del que procede cada dato, por ejemplo: «Según <strong>Light Vehicle Sales Forecast – Central Europe</strong>…».</td></tr>
+                    <tr><td>Etiquetas <strong>Sources</strong></td><td>Los documentos internos utilizados, sin duplicados, debajo de la respuesta.</td></tr>
+                    <tr><td>Enlaces web</td><td>Fuentes públicas. Solo se usan si la base de conocimiento no cubre la pregunta, y DraxBot lo advierte en la respuesta.</td></tr>
+                    <tr><td>Pie de la respuesta</td><td>Tiempo de respuesta y número de fuentes, por ejemplo <code>52.3s · 4 sources</code>.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="note ok">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>
+                <div><p class="t">DraxBot no inventa datos</p><p>Si no puede verificar una información, lo dice («No he encontrado información verificada sobre esto») o indica que los documentos la cubren solo en parte.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 5 -->
+          <article class="step" id="paso-5" data-step="5">
+            <div class="step-head">
+              <span class="step-num">5</span>
+              <div><p class="k">Paso 5</p><h3>Continuar la conversación o empezar otra</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-5"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <ol class="sub">
+                <li><div><p>Para profundizar, escribir la siguiente pregunta en el mismo cuadro. DraxBot recuerda la conversación, así que basta con <q>¿Y en Alemania?</q> o <q>Ponlo en una tabla</q>.</p></div></li>
+                <li><div><p>Si DraxBot devuelve una lista numerada de documentos, referirse a ellos por su número: <q>Resume el documento 3</q>.</p></div></li>
+                <li><div><p>Para volver a una respuesta anterior, pulsar su pregunta en <strong>History</strong>.</p></div></li>
+                <li><div><p>Para cambiar de tema, pulsar el icono de lápiz junto a <strong>History</strong>. La pantalla se vacía y DraxBot olvida el contexto anterior.</p></div></li>
+              </ol>
+              <div class="note warn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.2v.01"/></svg>
+                <div><p class="t">Las conversaciones no se guardan</p><p>Al recargar o cerrar la pestaña se borran la conversación y el historial. Copie las respuestas que quiera conservar antes de salir.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 6 -->
+          <article class="step" id="paso-6" data-step="6">
+            <div class="step-head">
+              <span class="step-num">6</span>
+              <div><p class="k">Paso 6</p><h3>Consultar los informes de inteligencia</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-6"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <p>DraxBot publica automáticamente un informe semanal y otro mensual sobre el mercado europeo de automoción. Están en inglés y cubren solo Europa (UE-27, AELC y Reino Unido).</p>
+              <ol class="sub">
+                <li><div>
+                  <p>Pulsar <strong>Weekly Reports</strong>, arriba a la derecha de la pantalla de DraxBot.</p>
+                  <figure>
+                    <button type="button" class="shot" aria-label="Ampliar figura 5"><img src="../img/05-boton-informes.webp" width="2876" height="474" alt="Parte superior de la pantalla de DraxBot con el botón Weekly Reports marcado y una flecha que indica dónde pulsar"></button>
+                    <figcaption><b>Figura 5.</b> Botón <b>Weekly Reports</b> para abrir los informes.</figcaption>
+                  </figure>
+                  <p>Se abre la página <em>Automotive Intelligence Reports</em>. Los números de la figura 6 coinciden con los de esta lista; el botón <strong>← DraxBot</strong> (1) vuelve al chat.</p>
+                  <figure>
+                    <button type="button" class="shot" aria-label="Ampliar figura 6"><img src="../img/06-pagina-informes.webp" width="2851" height="1668" alt="Página Automotive Intelligence Reports con zonas numeradas: 1 botón DraxBot, 2 sección Latest, 3 filtros por tipo y año, 4 buscador, 5 botones Read report"></button>
+                    <figcaption><b>Figura 6.</b> Página de informes: 1 volver al chat, 2 últimos informes, 3 filtros, 4 buscador, 5 abrir un informe.</figcaption>
+                  </figure>
+                </div></li>
+                <li><div><p>En <strong>Latest</strong> aparecen el último informe semanal y el último mensual. La etiqueta <strong>New</strong> marca los publicados desde su última visita.</p></div></li>
+                <li><div><p>En <strong>All reports</strong> están todos los informes, agrupados por mes. Filtrar por tipo con <strong>All</strong>, <strong>Weekly</strong> o <strong>Monthly</strong>, y por año con los botones de año.</p></div></li>
+                <li><div><p>Para buscar un tema en todos los informes, escribir al menos 2 caracteres en el buscador (<em>Search all reports…</em>): un competidor, un material o un país. Pulsar un resultado para abrir el informe.</p></div></li>
+                <li><div><p>Abrir un informe con <strong>Read report</strong>. Usar <strong>Sections</strong> para saltar a una sección y <strong>Sources (n)</strong> para ver las fuentes de cada sección.</p></div></li>
+                <li><div><p>Pasar al informe anterior o siguiente con <strong>Previous</strong> y <strong>Next</strong>, o volver al listado con <strong>← All reports</strong>.</p></div></li>
+              </ol>
+              <div class="paths-wrap">
+                <table class="paths">
+                  <thead><tr><th>Informe</th><th>Publicación</th><th>Periodo</th><th>Secciones</th></tr></thead>
+                  <tbody>
+                    <tr><td>Semanal</td><td>Lunes a las 07:00 (hora de Madrid)</td><td>Los 7 días anteriores</td><td><ol class="sections"><li>Europe Light Vehicle Production &amp; Sale</li><li>Medium &amp; Heavy-Duty Truck Market</li><li>Raw Material &amp; Commodities Prices</li><li>Key Customer News — OEM</li><li>Key Customer News — Tier-1</li><li>Key Competitor News</li></ol></td></tr>
+                    <tr><td>Mensual</td><td>Día 1 de cada mes a las 07:00 (hora de Madrid)</td><td>El mes natural anterior</td><td><ol class="sections" type="I"><li>Europe Light Vehicle Production &amp; Sale</li><li>Medium &amp; Heavy-Duty Truck Market</li><li>Macroeconomic Policies &amp; Economic Performance</li><li>Bulk Commodity &amp; Raw Material Prices</li><li>Exchange Rates &amp; Trade Environment</li><li>Application Market Analysis of Auto Components</li><li>Key Customer Dynamics</li><li>Impact Analysis on Ductile Iron Business</li></ol></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Las secciones de clientes y competidores siguen a estas empresas:</p>
+              <div class="paths-wrap">
+                <table class="paths">
+                  <thead><tr><th>Grupo</th><th>Empresas</th></tr></thead>
+                  <tbody>
+                    <tr><td>Clientes OEM</td><td>Ford, Iveco, Scania, Daimler Truck, Hyundai, MAN, Renault-Nissan, Stellantis, Volkswagen y Volvo Trucks</td></tr>
+                    <tr><td>Clientes Tier-1</td><td>ZF, Astemo, Schaeffler, Aumovio, Knorr-Bremse, BEINBAUER y Mobis</td></tr>
+                    <tr><td>Competidores</td><td>Fondium, MAT, Aapico, Brakes India, Fagor-Ederlan y Tupy Europe</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="note info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+                <div><p class="t">Próximos informes</p><p>La parte superior de la página de informes indica la fecha del próximo informe semanal y del próximo mensual.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 7 -->
+          <article class="step" id="paso-7" data-step="7">
+            <div class="step-head">
+              <span class="step-num">7</span>
+              <div><p class="k">Paso 7</p><h3>Guardar un informe en PDF</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-7"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <ol class="sub">
+                <li><div>
+                  <p>Pulsar <strong>Save as PDF</strong>, junto a <strong>Read report</strong> en la tarjeta del informe, o en la parte superior de un informe abierto.</p>
+                  <figure>
+                    <button type="button" class="shot" aria-label="Ampliar figura 7"><img src="../img/07-guardar-pdf.webp" width="1779" height="1096" alt="Tarjetas del último informe semanal y mensual con los botones Save as PDF marcados y el texto Pulse aquí"></button>
+                    <figcaption><b>Figura 7.</b> Botones <b>Save as PDF</b> en las tarjetas del último informe semanal y del último mensual.</figcaption>
+                  </figure>
+                </div></li>
+                <li><div><p>Se abre la ventana de impresión del navegador.</p></div></li>
+                <li><div><p>En <strong>Destino</strong> (o <strong>Impresora</strong>), elegir <strong>Guardar como PDF</strong>.</p></div></li>
+                <li><div><p>Pulsar <strong>Guardar</strong> y elegir la carpeta de destino.</p></div></li>
+              </ol>
+              <div class="note ok">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>
+                <div><p class="t">Listo para compartir</p><p>El PDF usa un formato preparado para imprimir e incluye todas las listas de fuentes desplegadas. Se guarda en su equipo, no en el servidor.</p></div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- 5. Ejemplos -->
+      <section id="ejemplos">
+        <h2>Ejemplos de preguntas</h2>
+        <p class="prose">Copie cualquiera de estas preguntas y péguela en DraxBot para empezar:</p>
+        <ul class="questions">
+          <li><q>¿Cuál es la previsión de ventas de vehículos ligeros en Europa Central para 2026?</q><button type="button" class="copy">Copiar</button></li>
+          <li><q>¿Cuáles son las últimas noticias de Stellantis en Europa?</q><button type="button" class="copy">Copiar</button></li>
+          <li><q>¿Qué noticias tenemos del 7 de junio de 2026?</q><button type="button" class="copy">Copiar</button></li>
+          <li><q>Compara en una tabla las previsiones de producción BEV e ICE de Alemania y Francia.</q><button type="button" class="copy">Copiar</button></li>
+          <li><q>¿Qué documentos tenemos sobre Volkswagen?</q><button type="button" class="copy">Copiar</button></li>
+          <li><q>¿Qué significa SOP en la producción de automoción?</q><button type="button" class="copy">Copiar</button></li>
+        </ul>
+        <div class="note info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+          <div><p class="t">Para obtener mejores respuestas</p><p>Indique la región, la empresa, el periodo y el tipo de vehículo (turismos, vehículos comerciales ligeros o camiones). Haga una pregunta por tema.</p></div>
+        </div>
+      </section>
+
+      <!-- 6. Buenas prácticas -->
+      <section id="buenas-practicas">
+        <h2>Buenas prácticas</h2>
+        <ul class="dots prose">
+          <li><strong>Sea concreto.</strong> <q>Previsión de ventas de vehículos ligeros en Polonia para 2026–2028</q> funciona mejor que <q>¿Previsión de ventas?</q>.</li>
+          <li><strong>Un tema por pregunta.</strong> Si le interesan varios temas, haga varias preguntas seguidas.</li>
+          <li><strong>Empiece una conversación nueva al cambiar de tema</strong>, para que las preguntas anteriores no condicionen la respuesta.</li>
+          <li><strong>Compruebe fechas y fuentes</strong> antes de usar una cifra en una presentación, un correo o una decisión.</li>
+          <li><strong>Protección de datos:</strong> las preguntas se procesan con un servicio de IA y, cuando hace falta, con búsquedas web públicas. No incluya datos personales ni información confidencial y siga la política de IA de su organización.</li>
+        </ul>
+      </section>
+
+      <!-- 7. Problemas -->
+      <section id="problemas">
+        <h2>Solución de problemas</h2>
+        <div class="issues">
+          <div class="issue">
+            <h3>La web de DraxBot no se abre</h3>
+            <dl><div><dt>Causa probable</dt><dd>El equipo no está conectado a la red corporativa ni a la VPN.</dd></div>
+            <div><dt>Solución</dt><dd>Conectarse a la VPN (o a la red de la oficina) y recargar la página (<a href="#paso-1">paso 1</a>). Si sigue sin abrirse, contactar con <a href="#soporte">soporte</a>.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>Punto rojo y «Connection error»</h3>
+            <dl><div><dt>Causa probable</dt><dd>Se ha perdido la conexión con la red corporativa o la VPN, o el servicio no está disponible.</dd></div>
+            <div><dt>Solución</dt><dd>Comprobar que la VPN sigue conectada y recargar la página. Si sigue en rojo, contactar con <a href="#soporte">soporte</a>.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>Aparece «Could not reach the server» al enviar</h3>
+            <dl><div><dt>Causa probable</dt><dd>Se perdió la conexión mientras se enviaba la pregunta.</dd></div>
+            <div><dt>Solución</dt><dd>Comprobar la conexión, recargar la página y volver a preguntar.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>No puedo iniciar sesión</h3>
+            <dl><div><dt>Causa probable</dt><dd>Se está usando una cuenta que no es de Draxton (por ejemplo, una cuenta personal) o la cuenta no tiene acceso a DraxBot.</dd></div>
+            <div><dt>Solución</dt><dd>Cerrar sesión en Microsoft y entrar con la cuenta de trabajo de Draxton. Si sigue sin acceso, contactar con <a href="#soporte">soporte</a>.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>Vuelve a aparecer la página de inicio de sesión de Microsoft</h3>
+            <dl><div><dt>Causa probable</dt><dd>La sesión ha caducado.</dd></div>
+            <div><dt>Solución</dt><dd>Iniciar sesión de nuevo y repetir la pregunta (<a href="#paso-1">paso 1</a>).</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>La respuesta tarda mucho o aparece un error</h3>
+            <dl><div><dt>Causa probable</dt><dd>La pregunta es muy amplia o el servicio tiene mucha carga. Lo normal son 45–70 segundos; pasados unos 90 segundos se muestra un error.</dd></div>
+            <div><dt>Solución</dt><dd>Volver a preguntar o dividir la pregunta en otras más concretas.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>Aparece «Sorry, I could not get an answer.»</h3>
+            <dl><div><dt>Causa probable</dt><dd>El agente no devolvió ninguna respuesta.</dd></div>
+            <div><dt>Solución</dt><dd>Reformular la pregunta o empezar una conversación nueva con el icono de lápiz.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>No aparece un documento que sé que existe</h3>
+            <dl><div><dt>Causa probable</dt><dd>Se añadió hoy y aún no se ha procesado, o la pregunta usa términos distintos a los del documento.</dd></div>
+            <div><dt>Solución</dt><dd>Probar al día siguiente, usar palabras del propio documento o preguntar <q>¿Qué documentos tenemos sobre…?</q>.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>DraxBot responde en otro idioma</h3>
+            <dl><div><dt>Causa probable</dt><dd>La pregunta mezcla idiomas.</dd></div>
+            <div><dt>Solución</dt><dd>Escribir la pregunta en un solo idioma y empezar una conversación nueva.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>Han desaparecido mis preguntas</h3>
+            <dl><div><dt>Causa probable</dt><dd>Se recargó o cerró la pestaña. Las conversaciones no se guardan.</dd></div>
+            <div><dt>Solución</dt><dd>Copiar las respuestas que se quieran conservar antes de salir (<a href="#paso-5">paso 5</a>).</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>Una sección de un informe dice «This section could not be generated»</h3>
+            <dl><div><dt>Causa probable</dt><dd>Fallo temporal al generar esa sección del informe.</dd></div>
+            <div><dt>Solución</dt><dd>Avisar a <a href="#soporte">soporte</a> indicando el informe y la sección.</dd></div></dl>
+          </div>
+          <div class="issue">
+            <h3>«Save as PDF» no hace nada</h3>
+            <dl><div><dt>Causa probable</dt><dd>El navegador ha bloqueado la ventana de impresión.</dd></div>
+            <div><dt>Solución</dt><dd>Abrir el informe y pulsar <kbd>Ctrl</kbd> + <kbd>P</kbd> (<kbd>Cmd</kbd> + <kbd>P</kbd> en Mac).</dd></div></dl>
+          </div>
+        </div>
+        <h3>Preguntas frecuentes</h3>
+        <dl class="faq">
+          <div><dt>¿Puedo subir mis propios documentos?</dt><dd>No. La base de conocimiento se alimenta automáticamente cada noche desde las fuentes configuradas. Para añadir una fuente, contacte con soporte.</dd></div>
+          <div><dt>¿Puedo generar un informe en el momento?</dt><dd>No. Los informes se publican automáticamente según su calendario. La página de informes indica cuándo llega el siguiente.</dd></div>
+          <div><dt>¿Puedo compartir un informe?</dt><dd>Sí. Copie la dirección del informe abierto y envíela a un compañero con acceso a DraxBot, o guárdelo en PDF (<a href="#paso-7">paso 7</a>) y adjúntelo.</dd></div>
+        </dl>
+      </section>
+
+      <!-- 8. Soporte -->
+      <section id="soporte">
+        <h2>Soporte</h2>
+        <p class="prose">Para cualquier duda o incidencia, use el canal de soporte habitual de su organización. Indique la pregunta que hizo, la hora y el mensaje de error, si apareció alguno.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <span>Inkoova · Documento preparado para Draxton</span>
+    <span>Versión 1.0 · 6 de octubre de 2026</span>
+  </footer>
+</div>
+
+<dialog class="zoom" id="zoom" aria-label="Captura ampliada">
+  <button type="button" id="zoom-close">Cerrar</button>
+  <img id="zoom-img" src="data:," alt="">
+</dialog>
+
+<script>
+(function () {
+  // Copiar al portapapeles, con selección del texto como alternativa
+  function selectText(el) {
+    try { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+  }
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var src = btn.closest('.code') ? btn.closest('.code').querySelector('code')
+              : (btn.closest('li') && btn.closest('.questions')) ? btn.closest('li').querySelector('q')
+              : btn.closest('.mail') ? btn.closest('.mail').querySelector('span') : null;
+      var text = btn.dataset.text || (src ? src.innerText : '');
+      var label = btn.textContent;
+      function done(msg, ok) {
+        btn.textContent = msg; if (ok) btn.classList.add('ok');
+        setTimeout(function () { btn.textContent = label; btn.classList.remove('ok'); }, 1800);
+      }
+      try {
+        navigator.clipboard.writeText(text).then(function () { done('Copiado', true); },
+          function () { if (src) selectText(src); done('Pulse Ctrl+C', false); });
+      } catch (e) { if (src) selectText(src); done('Pulse Ctrl+C', false); }
+    });
+  });
+
+  // Progreso de pasos (solo en este navegador)
+  var KEY = 'draxbot-guia-pasos';
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { saved = []; }
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.done-toggle input'));
+  function render() {
+    var n = 0;
+    boxes.forEach(function (b) {
+      var step = b.closest('.step'); var id = step.dataset.step;
+      step.classList.toggle('done', b.checked); if (b.checked) n++;
+      var link = document.querySelector('.toc a[data-step="' + id + '"]'); if (link) link.classList.toggle('is-done', b.checked);
+    });
+    document.getElementById('progress-count').textContent = n + ' de ' + boxes.length;
+    document.getElementById('progress-bar').style.width = (n / boxes.length * 100) + '%';
+  }
+  function save() {
+    var ids = boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.closest('.step').dataset.step; });
+    try { localStorage.setItem(KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+  boxes.forEach(function (b) {
+    if (saved.indexOf(b.closest('.step').dataset.step) !== -1) b.checked = true;
+    b.addEventListener('change', function () { render(); save(); });
+  });
+  document.getElementById('progress-reset').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; }); render(); save();
+  });
+  render();
+
+  // Ampliar capturas
+  var dlg = document.getElementById('zoom'), zimg = document.getElementById('zoom-img');
+  document.querySelectorAll('.shot').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var img = b.querySelector('img'); zimg.src = img.src; zimg.alt = img.alt;
+      if (dlg.showModal) dlg.showModal();
+    });
+  });
+  document.getElementById('zoom-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+})();
+</script>
+</body>
+</html>
