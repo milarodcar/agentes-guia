@@ -73,11 +73,10 @@ p { margin: 0; }
 .facts div { display: grid; }
 .facts dt { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .facts dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
-.open { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--accent); margin-top: 4px; }
-.open svg { width: 18px; height: 18px; transition: transform .15s ease; }
-.card:hover .open svg { transform: translateX(3px); }
+.open { font-weight: 600; color: var(--accent); margin-top: 4px; }
+.card:hover .open { text-decoration: underline; text-underline-offset: 3px; }
 .foot { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
-@media (prefers-reduced-motion: reduce) { .card, .open svg { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
 @media (max-width: 760px) { .guides { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) {
   body { font-size: 16px; }
@@ -104,7 +103,7 @@ p { margin: 0; }
         <div><dt>Pasos</dt><dd>7</dd></div>
         <div><dt>Tiempo de lectura</dt><dd>10 min</dd></div>
       </dl>
-      <span class="open">Abrir la guía <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <span class="open">Abrir la guía</span>
     </a>
     <a class="card" href="bi-comercial/">
       <span class="pill setup">Guía de instalación</span>
@@ -114,7 +113,7 @@ p { margin: 0; }
         <div><dt>Pasos</dt><dd>7</dd></div>
         <div><dt>Tiempo estimado</dt><dd>15–20 min</dd></div>
       </dl>
-      <span class="open">Abrir la guía <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <span class="open">Abrir la guía</span>
     </a>
   </main>
 
