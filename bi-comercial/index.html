@@ -312,9 +312,10 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
               <li><a href="#paso-3" data-step="3"><span class="n">3</span>Extensión MCP</a></li>
               <li><a href="#paso-4" data-step="4"><span class="n">4</span>Ruta del servidor</a></li>
               <li><a href="#paso-5" data-step="5"><span class="n">5</span>Configurar Claude</a></li>
-              <li><a href="#paso-6" data-step="6"><span class="n">6</span>Descargar el informe</a></li>
-              <li><a href="#paso-7" data-step="7"><span class="n">7</span>Conectar al informe</a></li>
-              <li><a href="#paso-8" data-step="8"><span class="n">8</span>Fijar el chat</a></li>
+              <li><a href="#paso-6" data-step="6"><span class="n">6</span>Power BI Desktop</a></li>
+              <li><a href="#paso-7" data-step="7"><span class="n">7</span>Descargar el informe</a></li>
+              <li><a href="#paso-8" data-step="8"><span class="n">8</span>Conectar al informe</a></li>
+              <li><a href="#paso-9" data-step="9"><span class="n">9</span>Fijar el chat</a></li>
             </ol>
           </li>
           <li><a href="#uso-diario"><span class="n">5</span>Uso diario (usuarios)</a></li>
@@ -326,7 +327,7 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
       </nav>
       <div class="progress" aria-live="polite">
         <div class="bar"><span id="progress-bar"></span></div>
-        <p><strong id="progress-count">0 de 8</strong> pasos completados</p>
+        <p><strong id="progress-count">0 de 9</strong> pasos completados</p>
         <button type="button" id="progress-reset">Reiniciar progreso</button>
       </div>
     </aside>
@@ -348,7 +349,7 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
         </div>
         <h3>¿Quién hace cada parte?</h3>
         <div class="roles">
-          <div class="role"><span class="role-tag tech">Equipo técnico</span><p>Realiza la instalación y la configuración completa (<a href="#instalacion">pasos 1 a 8</a>), en unos 15–20 minutos por equipo. Al terminar, deja creado y fijado en Claude el chat <span class="agent-name">Agente BI Comercial</span>.</p></div>
+          <div class="role"><span class="role-tag tech">Equipo técnico</span><p>Realiza la instalación y la configuración completa (<a href="#instalacion">pasos 1 a 9</a>), en unos 15–20 minutos por equipo. Al terminar, deja creado y fijado en Claude el chat <span class="agent-name">Agente BI Comercial</span>.</p></div>
           <div class="role"><span class="role-tag user">Usuarios</span><p>Solo tienen que abrir ese chat y preguntar. Lo explica la sección <a href="#uso-diario">Uso diario</a>.</p></div>
         </div>
       </section>
@@ -358,7 +359,7 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
         <h2>Requisitos previos</h2>
         <ul class="checks">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Equipo con <strong>Windows 10 u 11</strong>.</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Power BI Desktop</strong> instalado (gratuito, disponible en Microsoft Store).</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Power BI Desktop</strong>, gratuito en Microsoft Store. Si el equipo no lo tiene, se instala en el <a href="#paso-6">paso 6</a>.</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Acceso a <strong>Power BI Service</strong> con permiso para descargar el informe BI Comercial.</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Una <strong>cuenta de Claude</strong> para iniciar sesión en Claude Desktop.</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Un <strong>técnico con permisos</strong> para instalar aplicaciones en el equipo.</span></li>
@@ -375,9 +376,10 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
           <li><a href="#paso-3"><span class="num">3</span><span>Instalar la extensión Power BI Authoring MCP Server</span><span class="pill once">Una vez</span></a></li>
           <li><a href="#paso-4"><span class="num">4</span><span>Localizar la ruta del servidor MCP</span><span class="pill again">Repetir si se actualiza la extensión</span></a></li>
           <li><a href="#paso-5"><span class="num">5</span><span>Configurar Claude Desktop</span><span class="pill again">Repetir si se actualiza la extensión</span></a></li>
-          <li><a href="#paso-6"><span class="num">6</span><span>Descargar y abrir el informe BI Comercial</span><span class="pill again">El usuario lo repite al actualizarse los datos</span></a></li>
-          <li><a href="#paso-7"><span class="num">7</span><span>Conectar Claude al informe</span><span class="pill once">Una vez</span></a></li>
-          <li><a href="#paso-8"><span class="num">8</span><span>Fijar el chat como <span class="agent-name">Agente BI Comercial</span></span><span class="pill once">Una vez</span></a></li>
+          <li><a href="#paso-6"><span class="num">6</span><span>Instalar Power BI Desktop desde Microsoft Store</span><span class="pill once">Una vez</span></a></li>
+          <li><a href="#paso-7"><span class="num">7</span><span>Descargar y abrir el informe BI Comercial</span><span class="pill again">El usuario lo repite al actualizarse los datos</span></a></li>
+          <li><a href="#paso-8"><span class="num">8</span><span>Conectar Claude al informe</span><span class="pill once">Una vez</span></a></li>
+          <li><a href="#paso-9"><span class="num">9</span><span>Fijar el chat como <span class="agent-name">Agente BI Comercial</span></span><span class="pill once">Una vez</span></a></li>
         </ol>
       </section>
 
@@ -545,8 +547,30 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
           <article class="step" id="paso-6" data-step="6">
             <div class="step-head">
               <span class="step-num">6</span>
-              <div><p class="k">Paso 6</p><h3>Descargar y abrir el informe «BI Comercial»</h3></div>
+              <div><p class="k">Paso 6</p><h3>Instalar Power BI Desktop</h3></div>
               <label class="done-toggle"><input type="checkbox" id="done-6"> Hecho</label>
+            </div>
+            <div class="step-body">
+              <p>El informe se descarga como un archivo <code>.pbix</code>, que solo se puede abrir con <strong>Power BI Desktop</strong>. Si el equipo ya lo tiene instalado, pase al paso 7.</p>
+              <ol class="sub">
+                <li><div><p>Abrir <strong>Microsoft Store</strong> desde el menú Inicio y buscar <strong>Power BI Desktop</strong>. Comprobar que el editor es <strong>Microsoft</strong>.</p></div></li>
+                <li><div><p>Pulsar <strong>Obtener</strong> (o <strong>Instalar</strong>) y esperar a que termine la instalación.</p></div></li>
+                <li><div><p>Abrir Power BI Desktop una vez para comprobar que se inicia correctamente.</p></div></li>
+              </ol>
+              <a class="dl-link" href="https://apps.microsoft.com/detail/9ntxr16hnw1t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Power BI Desktop en Microsoft Store</a>
+              <div class="note info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+                <div><p class="t">¿Por qué desde Microsoft Store?</p><p>La versión de Microsoft Store se actualiza sola cada mes y no necesita permisos de administrador para instalarse.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Paso 7 -->
+          <article class="step" id="paso-7" data-step="7">
+            <div class="step-head">
+              <span class="step-num">7</span>
+              <div><p class="k">Paso 7</p><h3>Descargar y abrir el informe «BI Comercial»</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-7"> Hecho</label>
             </div>
             <div class="step-body">
               <p>El servidor MCP trabaja sobre el modelo abierto en Power BI Desktop, así que hace falta una copia local del informe.</p>
@@ -566,12 +590,12 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
             </div>
           </article>
 
-          <!-- Paso 7 -->
-          <article class="step" id="paso-7" data-step="7">
+          <!-- Paso 8 -->
+          <article class="step" id="paso-8" data-step="8">
             <div class="step-head">
-              <span class="step-num">7</span>
-              <div><p class="k">Paso 7</p><h3>Conectar Claude al informe</h3></div>
-              <label class="done-toggle"><input type="checkbox" id="done-7"> Hecho</label>
+              <span class="step-num">8</span>
+              <div><p class="k">Paso 8</p><h3>Conectar Claude al informe</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-8"> Hecho</label>
             </div>
             <div class="step-body">
               <ol class="sub">
@@ -600,17 +624,17 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
             </div>
           </article>
 
-          <!-- Paso 8 -->
-          <article class="step" id="paso-8" data-step="8">
+          <!-- Paso 9 -->
+          <article class="step" id="paso-9" data-step="9">
             <div class="step-head">
-              <span class="step-num">8</span>
-              <div><p class="k">Paso 8</p><h3>Fijar el chat como «Agente BI Comercial»</h3></div>
-              <label class="done-toggle"><input type="checkbox" id="done-8"> Hecho</label>
+              <span class="step-num">9</span>
+              <div><p class="k">Paso 9</p><h3>Fijar el chat como «Agente BI Comercial»</h3></div>
+              <label class="done-toggle"><input type="checkbox" id="done-9"> Hecho</label>
             </div>
             <div class="step-body">
-              <p>Para que los usuarios no tengan que repetir la conexión, el equipo técnico deja preparado el chat del paso 7, ya iniciado y conectado al informe, con un nombre fijo y anclado en la barra lateral de Claude.</p>
+              <p>Para que los usuarios no tengan que repetir la conexión, el equipo técnico deja preparado el chat del paso 8, ya iniciado y conectado al informe, con un nombre fijo y anclado en la barra lateral de Claude.</p>
               <ol class="sub">
-                <li><div><p>En el chat del paso 7, abrir el menú de la conversación: clic en el título de la parte superior, o en <strong>⋯</strong> al pasar el ratón sobre la conversación en la barra lateral.</p></div></li>
+                <li><div><p>En el chat del paso 8, abrir el menú de la conversación: clic en el título de la parte superior, o en <strong>⋯</strong> al pasar el ratón sobre la conversación en la barra lateral.</p></div></li>
                 <li><div>
                   <p>Elegir <strong>Cambiar nombre</strong> y escribir:</p>
                   <div class="code"><div class="code-bar"><span>Nombre del chat</span><button type="button" class="copy">Copiar</button></div><pre><code>Agente BI Comercial</code></pre></div>
@@ -620,7 +644,7 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
               </ol>
               <div class="note warn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.6-5.5 7-5.5s6.2 2 7 5.5"/></svg>
-                <div><p class="t">Hágalo con la cuenta del usuario</p><p>Los chats pertenecen a cada cuenta de Claude. Toda la configuración, y en especial los pasos 7 y 8, debe hacerse con la cuenta del usuario final iniciada en Claude Desktop, no con la del técnico.</p></div>
+                <div><p class="t">Hágalo con la cuenta del usuario</p><p>Los chats pertenecen a cada cuenta de Claude. Toda la configuración, y en especial los pasos 8 y 9, debe hacerse con la cuenta del usuario final iniciada en Claude Desktop, no con la del técnico.</p></div>
               </div>
               <p class="muted-note">Los nombres de las opciones del menú pueden variar ligeramente según la versión de Claude Desktop.</p>
             </div>
@@ -633,7 +657,7 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
         <div class="sec-head"><h2>Uso diario</h2><span class="role-tag user">Usuarios</span></div>
         <p class="prose">Con el equipo ya configurado, el día a día se reduce a tres pasos:</p>
         <ol class="sub prose">
-          <li><div><p>Abrir el informe <strong>BI Comercial</strong> en Power BI Desktop. Si los datos se han actualizado en Power BI Service, descargar antes la nueva versión (<a href="#paso-6">paso 6</a>).</p></div></li>
+          <li><div><p>Abrir el informe <strong>BI Comercial</strong> en Power BI Desktop. Si los datos se han actualizado en Power BI Service, descargar antes la nueva versión (<a href="#paso-7">paso 7</a>).</p></div></li>
           <li><div><p>Abrir Claude Desktop y, en la barra lateral, entrar en el chat fijado <span class="agent-name">Agente BI Comercial</span>.</p></div></li>
           <li><div><p>Escribir la pregunta en lenguaje natural.</p></div></li>
         </ol>
@@ -702,12 +726,12 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
           <div class="issue">
             <h3>El chat fijado no aparece en la barra lateral</h3>
             <dl><div><dt>Causa probable</dt><dd>Se configuró con una cuenta de Claude distinta de la del usuario.</dd></div>
-            <div><dt>Solución</dt><dd>Iniciar sesión con la cuenta del usuario y repetir los pasos <a href="#paso-7">7</a> y <a href="#paso-8">8</a>.</dd></div></dl>
+            <div><dt>Solución</dt><dd>Iniciar sesión con la cuenta del usuario y repetir los pasos <a href="#paso-8">8</a> y <a href="#paso-9">9</a>.</dd></div></dl>
           </div>
           <div class="issue">
             <h3>Claude avisa de que la conversación es demasiado larga</h3>
             <dl><div><dt>Causa probable</dt><dd>El chat ha acumulado muchas consultas.</dd></div>
-            <div><dt>Solución</dt><dd>Crear un chat nuevo repitiendo los pasos 7 y 8 y quitar el fijado del anterior.</dd></div></dl>
+            <div><dt>Solución</dt><dd>Crear un chat nuevo repitiendo los pasos 8 y 9 y quitar el fijado del anterior.</dd></div></dl>
           </div>
           <div class="issue">
             <h3>Claude no encuentra el informe</h3>
@@ -715,9 +739,14 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
             <div><dt>Solución</dt><dd>Abrir el <code>.pbix</code>, esperar a que cargue y usar el nombre exacto del archivo.</dd></div></dl>
           </div>
           <div class="issue">
+            <h3>El archivo .pbix descargado no se abre</h3>
+            <dl><div><dt>Causa probable</dt><dd>Power BI Desktop no está instalado en el equipo.</dd></div>
+            <div><dt>Solución</dt><dd>Instalarlo desde Microsoft Store (<a href="#paso-6">paso 6</a>) y volver a abrir el archivo.</dd></div></dl>
+          </div>
+          <div class="issue">
             <h3>Los datos no coinciden con Power BI Service</h3>
             <dl><div><dt>Causa probable</dt><dd>La copia local está desactualizada.</dd></div>
-            <div><dt>Solución</dt><dd>Volver a descargar el informe (<a href="#paso-6">paso 6</a>).</dd></div></dl>
+            <div><dt>Solución</dt><dd>Volver a descargar el informe (<a href="#paso-7">paso 7</a>).</dd></div></dl>
           </div>
           <div class="issue">
             <h3>Error de sintaxis al guardar el JSON</h3>
@@ -774,7 +803,7 @@ dialog.zoom button { position: absolute; top: 8px; right: 8px; font: 600 .85rem 
   });
 
   // Progreso de pasos (solo en este navegador)
-  var KEY = 'proyeccion-comercial-guia-pasos';
+  var KEY = 'bi-comercial-guia-pasos';
   var saved = [];
   try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { saved = []; }
   var boxes = Array.prototype.slice.call(document.querySelectorAll('.done-toggle input'));
