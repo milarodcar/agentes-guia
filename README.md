@@ -6,7 +6,7 @@ Manuales web, en español, para los usuarios de Draxton. Son páginas estáticas
 | --- | --- | --- |
 | Portada | Página de inicio con las dos guías | https://milarodcar.github.io/agentes-guia/ |
 | DraxBot | Cómo usar DraxBot, el agente de documentación: acceso, preguntas, respuestas e informes de inteligencia | https://milarodcar.github.io/agentes-guia/draxbot/ |
-| BI Comercial con Claude | Cómo configurar Claude Desktop para consultar el informe de Power BI «Proyección Comercial» | https://milarodcar.github.io/agentes-guia/bi-comercial/ |
+| BI Comercial con Claude | Cómo configurar Claude Desktop para consultar el informe de Power BI «BI Comercial» | https://milarodcar.github.io/agentes-guia/bi-comercial/ |
 
 Las dos guías tienen arriba un selector **Guías** para pasar de una a otra; la palabra «Guías» lleva a la portada.
 
