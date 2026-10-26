@@ -331,7 +331,7 @@ q { quotes: "«" "»"; }
         <h2>Introducción</h2>
         <div class="prose">
           <p>Esta guía explica cómo usar <strong>DraxBot</strong>, el agente de documentación de Draxton. DraxBot responde en lenguaje natural a preguntas sobre el mercado de automoción europeo a partir de una base de conocimiento interna, y en cada respuesta indica de qué documentos procede la información.</p>
-          <p><strong>¿Cómo funciona?</strong> Usted escribe la pregunta en la web de DraxBot. El agente la reformula para buscar mejor, localiza los fragmentos relevantes en la base de conocimiento y redacta la respuesta citando las fuentes. Si la base de conocimiento no cubre la pregunta, busca en fuentes públicas de confianza y lo indica en la respuesta.</p>
+          <p><strong>¿Cómo funciona?</strong> Usted escribe la pregunta en la web de DraxBot. El agente la reformula para buscar mejor, localiza los fragmentos relevantes en la base de conocimiento y redacta la respuesta citando las fuentes. DraxBot solo usa la información de la base de conocimiento: no hace búsquedas en internet.</p>
         </div>
         <div class="flow" role="img" aria-label="La web de DraxBot envía la pregunta al agente, que busca en la base de conocimiento y devuelve la respuesta con sus fuentes">
           <div class="node"><b>Web de DraxBot</b><span>Usted escribe la pregunta y recibe la respuesta con sus fuentes.</span></div>
@@ -510,14 +510,13 @@ q { quotes: "«" "»"; }
                     <tr><td>Fechas</td><td>La fecha de cada dato clave. Los hechos antiguos se presentan como contexto, para no confundirlos con noticias actuales.</td></tr>
                     <tr><td>Documentos citados en el texto</td><td>El documento interno del que procede cada dato, por ejemplo: «Según <strong>Light Vehicle Sales Forecast – Central Europe</strong>…».</td></tr>
                     <tr><td>Etiquetas <strong>Sources</strong></td><td>Los documentos internos utilizados, sin duplicados, debajo de la respuesta.</td></tr>
-                    <tr><td>Enlaces web</td><td>Fuentes públicas. Solo se usan si la base de conocimiento no cubre la pregunta, y DraxBot lo advierte en la respuesta.</td></tr>
                     <tr><td>Pie de la respuesta</td><td>Tiempo de respuesta y número de fuentes, por ejemplo <code>52.3s · 4 sources</code>.</td></tr>
                   </tbody>
                 </table>
               </div>
               <div class="note warn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.2v.01"/></svg>
-                <div><p class="t">Revise la información importante</p><p>DraxBot responde a partir de los documentos disponibles: puede no encontrar lo que busca o cometer errores. Compruebe la respuesta y sus fuentes antes de usarla en una presentación, un correo o una decisión.</p></div>
+                <div><p class="t">Revise la información importante</p><p>DraxBot responde solo a partir de los documentos de la base de conocimiento: puede no encontrar lo que busca o cometer errores. Compruebe la respuesta y sus fuentes antes de usarla en una presentación, un correo o una decisión.</p></div>
               </div>
             </div>
           </article>
@@ -654,7 +653,7 @@ q { quotes: "«" "»"; }
           <li><strong>Un tema por pregunta.</strong> Si le interesan varios temas, haga varias preguntas seguidas.</li>
           <li><strong>Empiece una conversación nueva al cambiar de tema</strong>, para que las preguntas anteriores no condicionen la respuesta.</li>
           <li><strong>Compruebe fechas y fuentes</strong> antes de usar un dato en una presentación, un correo o una decisión.</li>
-          <li><strong>Protección de datos:</strong> las preguntas se procesan con un servicio de IA y, cuando hace falta, con búsquedas web públicas. No incluya datos personales ni información confidencial y siga la política de IA de su organización.</li>
+          <li><strong>Protección de datos:</strong> las preguntas se procesan con un servicio de IA. No incluya datos personales ni información confidencial y siga la política de IA de su organización.</li>
         </ul>
       </section>
 
